@@ -1,0 +1,78 @@
+Here’s a step-by-step guide to install KVM and Virt-Manager on a Linux platform and run a virtualized OS:
+
+Step 1: Update the System
+Run the following command to ensure your system is up-to-date:
+
+bash
+Copy code
+sudo apt update && sudo apt upgrade -y
+Step 2: Check Hardware Virtualization Support
+Verify if your CPU supports hardware virtualization:
+
+bash
+Copy code
+egrep -c '(vmx|svm)' /proc/cpuinfo
+If the output is greater than 0, your CPU supports virtualization.
+You can also check virtualization support:
+
+bash
+Copy code
+lscpu | grep Virtualization
+Step 3: Install KVM and Related Packages
+Install KVM, qemu, and other dependencies:
+
+For Ubuntu/Debian:
+bash
+Copy code
+sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager
+For Fedora/RHEL:
+bash
+Copy code
+sudo dnf install -y @virtualization
+sudo dnf install -y virt-manager libvirt-daemon-config-network
+Step 4: Enable and Start Libvirt Service
+Start and enable the libvirt service:
+
+bash
+Copy code
+sudo systemctl enable --now libvirtd
+Verify the service is running:
+
+bash
+Copy code
+sudo systemctl status libvirtd
+Step 5: Add User to KVM Group
+Add your user to the libvirt and kvm groups for permission to manage virtual machines:
+
+bash
+Copy code
+sudo usermod -aG libvirt,kvm $USER
+Log out and back in for the changes to take effect.
+
+Step 6: Launch Virt-Manager
+Start Virt-Manager with the following command:
+
+bash
+Copy code
+virt-manager
+Alternatively, search for "Virtual Machine Manager" in your desktop environment.
+
+Step 7: Create a Virtual Machine
+Open Virt-Manager.
+Click on "New Virtual Machine".
+Choose one of the following:
+Use a local installation media (ISO image).
+Network boot (PXE).
+Provide the path to the ISO file of the operating system.
+Allocate CPU and memory resources for the virtual machine.
+Create or select a disk image for storage.
+Finish the setup and start the virtual machine.
+Step 8: (Optional) Configure Networking
+For a bridged network, edit /etc/network/interfaces or use nmcli to configure a bridge interface. Ensure the bridge is configured in Virt-Manager under the network settings.
+
+Step 9: Manage Virtual Machines
+Use Virt-Manager to:
+
+Start, stop, or pause VMs.
+Edit virtual hardware settings.
+This will set up and allow you to manage virtual machines using KVM and Virt-Manager effectively. If you face issues, let me know!

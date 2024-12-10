@@ -1,0 +1,85 @@
+To set up KVM (Kernel-based Virtual Machine) with Virt-Manager on AlmaLinux and run a virtualized OS, follow these steps:
+
+Step 1: Update the System
+Before proceeding, ensure the system is up-to-date.
+
+bash
+Copy code
+sudo dnf update -y
+sudo reboot
+Step 2: Check for Virtualization Support
+Verify if your CPU supports virtualization.
+
+bash
+Copy code
+egrep -c '(vmx|svm)' /proc/cpuinfo
+If the output is 0, your CPU does not support virtualization.
+If it’s 1 or more, proceed.
+Step 3: Install KVM and Virtualization Packages
+Install KVM, Virt-Manager, and required packages.
+
+bash
+Copy code
+sudo dnf install -y qemu-kvm libvirt libvirt-daemon libvirt-daemon-config-network libvirt-daemon-kvm virt-manager bridge-utils
+Step 4: Enable and Start Libvirt Service
+Ensure the libvirt service is enabled and running.
+
+bash
+Copy code
+sudo systemctl enable libvirtd
+sudo systemctl start libvirtd
+Check the service status:
+
+bash
+Copy code
+sudo systemctl status libvirtd
+Step 5: Verify Installation
+Check if KVM is installed and running properly.
+
+bash
+Copy code
+sudo virsh list --all
+You should see an empty list of VMs if everything is configured correctly.
+
+Step 6: Add Current User to the libvirt Group
+Add your user to the libvirt group to manage virtual machines without sudo.
+
+bash
+Copy code
+sudo usermod -aG libvirt $(whoami)
+Log out and log back in for the changes to take effect.
+
+Step 7: Install and Configure Virt-Manager
+Launch the Virt-Manager GUI:
+
+bash
+Copy code
+virt-manager
+If it doesn’t launch via the terminal, use the system menu.
+
+Step 8: Create a Virtual Machine
+Open Virt-Manager.
+Click on File > New Virtual Machine.
+Choose installation source:
+For ISO: Select Local install media (ISO image or CDROM).
+For network-based installation: Choose Network Install.
+Configure:
+Memory and CPU allocation.
+Disk image (e.g., create a 20GB QCOW2 disk).
+Follow the prompts to complete the setup.
+Step 9: Start the Virtual Machine
+Once created, start the VM by selecting it in Virt-Manager and clicking Start.
+
+Step 10: Troubleshooting
+If you face network issues, ensure the default network is active:
+
+bash
+Copy code
+sudo virsh net-list
+If inactive, start it:
+
+bash
+Copy code
+sudo virsh net-start default
+sudo virsh net-autostart default
+This completes the installation and setup of KVM with Virt-Manager on AlmaLinux. You can now install and run virtualized operating systems!

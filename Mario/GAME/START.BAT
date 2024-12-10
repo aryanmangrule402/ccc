@@ -1,0 +1,2 @@
+Mario.exe
+exit
